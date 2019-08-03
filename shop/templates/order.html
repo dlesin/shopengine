@@ -3,19 +3,21 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-	<form action="{% url 'make_order_view_url' %}" method="post">
-	{% csrf_token %}
-		<div class="col-sm-6 col-sm-offset-3">
-		{{ form.first_name|as_crispy_field }}
-		{{ form.last_name|as_crispy_field }}
-		{{ form.phone|as_crispy_field }}
-		{{ form.buying_type|as_crispy_field }}
-		<div id="id_address" style="display: none;">{{ form.address|as_crispy_field }}</div>
-{#		{{ form.date|as_crispy_field }}#}
-		{{ form.comments|as_crispy_field }}
-			<button class="btn btn-success pull-right">Оформить заказ</button>
+	<div class="container">
+		<div class="row">
+			<form action="{% url 'make_order_view_url' %}" method="post">
+				{% csrf_token %}
+				<div class="col-sm-6 col-sm-offset-3">
+					{{ form.first_name|as_crispy_field }}
+					{{ form.last_name|as_crispy_field }}
+					{{ form.phone|as_crispy_field }}
+					{{ form.buying_type|as_crispy_field }}
+					<div id="id_address" style="display: none;">{{ form.address|as_crispy_field }}</div>
+					{#		{{ form.date|as_crispy_field }}#}
+					{{ form.comments|as_crispy_field }}
+					<button class="btn btn-success pull-right">Оформить заказ</button>
+				</div>
+			</form>
 		</div>
-	</form>
-
+	</div>
 {% endblock content %}

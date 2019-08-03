@@ -6,18 +6,17 @@ from decimal import Decimal
 
 
 def get_cart(request):
-    try:
-        cart_id = request.session['cart_id']
-        cart = Cart.objects.get(id=cart_id)
+    if request.session.get('cart_id'):
+        cart = Cart.objects.get(id=request.session.get('cart_id'))
         request.session['total'] = cart.items.count()
         return cart
-    except:
+    else:
         cart = Cart()
         cart.save()
-        cart_id = cart.id
-        request.session['cart_id'] = cart_id
-        cart = Cart.objects.get(id=cart_id)
+        request.session['cart_id'] = cart.id
+        cart = Cart.objects.get(id=request.session['cart_id'])
         return cart
+
 
 def base_view(request):
     cart = get_cart(request)
@@ -43,9 +42,10 @@ def product_view(request, product_slug):
 
 def category_view(request, category_slug):
     category = Category.objects.get(slug__iexact=category_slug)
+    categories = Category.objects.all()
     products_of_category = Product.objects.filter(category=category)
     context = {
-        'category': category,
+        'categories': categories,
         'products_of_category': products_of_category
     }
     return render(request, 'category.html', context=context)
@@ -63,7 +63,10 @@ def add_to_cart_view(request):
     cart = get_cart(request)
     product_slug = request.GET.get('product_slug')
     product = Product.objects.get(slug__iexact=product_slug)
-    cart.add_to_card(product.slug)
+    new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
+    if new_item not in cart.items.all():
+        cart.items.add(new_item)
+        cart.save()
     new_cart_total = 0.00
     for item in cart.items.all():
         new_cart_total += float(item.item_total)
@@ -76,7 +79,10 @@ def remove_from_cart_view(request):
     cart = get_cart(request)
     product_slug = request.GET.get('product_slug')
     product = Product.objects.get(slug__iexact=product_slug)
-    cart.remove_from_card(product.slug)
+    for cart_item in cart.items.all():
+        if cart_item.product == product:
+            cart.items.remove(cart_item)
+            cart.save()
     new_cart_total = 0.00
     for item in cart.items.all():
         new_cart_total += float(item.item_total)
@@ -125,6 +131,8 @@ def order_create_view(request):
 
 def make_order_view(request):
     cart = get_cart(request)
+    if cart.items.count() == 0:
+        return redirect('base_view_url', permanent=True)
     items_in_cart = cart.items.all()
     items_in_order = '\n'.join([str(item_in_cart) for item_in_cart in items_in_cart])
     form = OrderForm(request.POST or None)
@@ -133,7 +141,6 @@ def make_order_view(request):
         last_name = form.cleaned_data['last_name']
         phone = form.cleaned_data['phone']
         buying_type = form.cleaned_data['buying_type']
-        print (buying_type)
         address = form.cleaned_data['address']
         comments = form.cleaned_data['comments']
         new_order = Order()
@@ -149,8 +156,13 @@ def make_order_view(request):
         new_order.save()
         del request.session['cart_id']
         del request.session['total']
+        request.session['order_id'] = new_order.id
         return redirect('thanks_view_url', permanent=True)
 
 
 def thanks_view(request):
-    return render(request, 'thanks.html')
+    order_id = request.session['order_id']
+    context = {
+        'id': order_id
+    }
+    return render(request, 'thanks.html', context)

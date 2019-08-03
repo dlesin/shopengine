@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.db.models.signals import pre_save
-from django.conf import settings
+# from django.conf import settings
 from django.utils.text import slugify
 from django.shortcuts import reverse
 from transliterate import translit
@@ -79,22 +79,22 @@ class Cart(models.Model):
     
     def __str__(self):
         return f"Корзина  №{self.id}"
+
+    # def add_to_card(self, product_slug):
+    #     cart = self
+    #     product = Product.objects.get(slug__iexact=product_slug)
+    #     new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
+    #     if new_item not in cart.items.all():
+    #         cart.items.add(new_item)
+    #         cart.save()
     
-    def add_to_card(self, product_slug):
-        cart = self
-        product = Product.objects.get(slug__iexact=product_slug)
-        new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
-        if new_item not in cart.items.all():
-            cart.items.add(new_item)
-            cart.save()
-    
-    def remove_from_card(self, product_slug):
-        cart = self
-        product = Product.objects.get(slug__iexact=product_slug)
-        for cart_item in cart.items.all():
-            if cart_item.product == product:
-                cart.items.remove(cart_item)
-                cart.save()
+    # def remove_from_card(self, product_slug):
+    #     cart = self
+    #     product = Product.objects.get(slug__iexact=product_slug)
+    #     for cart_item in cart.items.all():
+    #         if cart_item.product == product:
+    #             cart.items.remove(cart_item)
+    #             cart.save()
 
 
 ORDER_STATUS_CHOICES = (

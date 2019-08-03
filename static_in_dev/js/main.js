@@ -75,4 +75,4 @@ $(document).ready(function () {
             $('#id_address').css('display', 'none');
         }
     })
-})
+});
