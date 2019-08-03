@@ -1,1 +1,1 @@
-# shopengine - first shopapp
+# Тестовая логика для инет магаза
