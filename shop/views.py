@@ -28,7 +28,7 @@ def base_view(request):
         'products': products,
         'cart': cart,
     }
-    return render(request, 'base.html', context=context)
+    return render(request, 'home.html', context=context)
 
 
 def product_view(request, product_slug):
