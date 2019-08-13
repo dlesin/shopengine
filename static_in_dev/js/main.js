@@ -46,7 +46,7 @@ $(document).ready(function () {
 });
 // product scripts
 $(document).ready(function () {
-    $('.add-to-cart').on('click', function (e) {
+    $('#add-to-cart').on('click', function (e) {
         e.preventDefault();
         product_slug = $(this).attr('data-slug');
         data = {
@@ -58,8 +58,8 @@ $(document).ready(function () {
             data: data,
             success: function (data) {
                 $('#cart-count').html(data.cart_total);
-                $('.add-to-cart').remove();
-                $('#button').html('<a href="/cart/" class="add-to-cart-order">' + '<button class="btn btn-success">' + 'Оформить' + '</button>' + '</a>')
+                $('#add-to-cart').remove();
+                $('#button').html('<a href="/cart/" id="add-to-cart-order">' + '<button class="btn btn-success">' + 'Оформить' + '</button>' + '</a>')
             }
         })
     })

@@ -12,10 +12,19 @@
 				<p>{% lorem %}</p>
 				<hr>
 				<p style="font-size:20px;">Цена: <strong>{{ product.price }}</strong></p>
-				<div id="button"><a href="#" class="add-to-cart" data-slug="{{ product.slug }}">
-					<button class="btn btn-danger">Добавить в корзину</button>
-				</a>
-			</div>
+				{% if product_in_cart %}
+				<div id="button">
+					<a href="{% url 'cart_view_url' %}" id="add-to-cart-order">
+						<button class="btn btn-success">Оформить</button>
+					</a>
+				</div>
+				{% else %}
+				<div id="button">
+					<a href="#" id="add-to-cart" data-slug="{{ product.slug }}">
+						<button class="btn btn-danger">Добавить в корзину</button>
+					</a>
+				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>
