@@ -15,14 +15,14 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('category_detail_url', kwargs={'category_slug': self.slug})
-
+        return reverse('category_detail_url', kwargs={
+            'slug': self.slug
+        })
 
 def pre_save_category_slug(sender, instance, *args, **kwargs):
     if not instance.slug:
         slug = slugify(translit(str(instance.name), reversed=True))
         instance.slug = slug
-
 
 pre_save.connect(pre_save_category_slug, sender=Category)
 
@@ -61,7 +61,9 @@ class Product(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('product_detail_url', kwargs={'product_slug': self.slug})
+        return reverse('product_detail_url', kwargs={
+            'slug': self.slug
+        })
 
 
 class CartItem(models.Model):
