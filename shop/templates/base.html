@@ -9,15 +9,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
-	<title>{% block head_title %}SHOP{% endblock %}</title>
-	{% block extra_head %}
-	{% endblock %}
-
 	<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
 	<link href="{% static "css/shop-homepage.css" %}" rel="stylesheet">
+	<title>
+		{% block head_title %}
+		SHOP
+		{% endblock head_title %}
+	</title>
 
+	{% block extra_head %}
+	{% endblock extra_head %}
+	
 </head>
+
 <body>
 
 {% include "navbar.html" %}
