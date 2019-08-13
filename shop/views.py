@@ -23,8 +23,13 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        cart = get_cart(self.request)
+        products = Product.objects.filter(available=True)
+        print (products)
+        context['product_in_cart'] = [ item.product.title for item in cart.items.all() ]
+        print (context['product_in_cart'])
         context['categories_list'] = Category.objects.all()
-        context['cart'] = get_cart(self.request)
+        context['cart'] = cart
         return context
 
 
